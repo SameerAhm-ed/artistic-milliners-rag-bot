@@ -57,19 +57,28 @@ session history) → local LLM → answer + cited sources + retrieved chunks. Fu
 
 ## Honest evaluation
 
-A fixed 6-question eval (`backend/eval/`) runs live against the API. Current result on this
-machine with `llama3.2:3b`:
+A fixed 6-question eval plus a dedicated multi-turn check (`backend/eval/`) runs live
+against the API. Current result on this machine with `llama3.2:3b`:
 
-**6 / 6 passed** — 5 in-corpus factual questions answered correctly with the right cited
-source, and 1 out-of-corpus question (the CEO) correctly answered *"I don't know"* instead
-of hallucinating.
+**7 / 7 passed** — 5 in-corpus factual questions answered correctly with the right cited
+source, 1 out-of-corpus question (the CEO) correctly answered *"I don't know"* instead of
+hallucinating, and 1 multi-turn check proving conversation history is actually used: within
+one session, "Do you offer stretch denim?" followed by the pronoun-only follow-up "What fits
+is it suited for?" resolves "it" to stretch denim via history and correctly answers
+"skinny and jegging fits".
 
 Honesty notes:
 - The eval matcher normalizes number formatting (`1,000` == `1000`) and accepts several
   correct phrasings per question — because a small local LLM paraphrases. It tests whether
   the **fact** is present, not an exact string. The model's answers were correct before this
   change; the fix was to the test's brittleness, not the bot.
-- This is a small, hand-written corpus and a 6-question eval — a demonstration of the RAG
+- Each single-turn eval question runs in its own isolated session so unrelated questions
+  never leak history into each other; the multi-turn check uses a separate shared session
+  specifically to prove history *does* carry over when it should.
+- The refusal check requires an explicit "don't know" / "not sure" phrase — not the word
+  "contact" — since the corpus has a "contact the sales team" section that could otherwise
+  let a hallucinated answer pass.
+- This is a small, hand-written corpus and a 7-check eval — a demonstration of the RAG
   pipeline and its evaluation discipline, not a benchmark claim.
 
 ## Running it locally
@@ -86,6 +95,7 @@ ollama pull llama3.2:3b
 cd backend
 python -m venv .venv
 .venv\Scripts\pip install -r requirements.txt        # Windows
+# (macOS/Linux: python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt)
 uvicorn main:app --port 8000
 ```
 Then ingest the corpus (one time):

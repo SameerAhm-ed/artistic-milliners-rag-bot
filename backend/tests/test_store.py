@@ -21,3 +21,7 @@ def test_query_returns_relevant_chunk(tmp_path):
     assert len(results) == 1
     assert results[0]["source_file"] == "support.md"
     assert "text" in results[0] and "score" in results[0]
+
+def test_query_before_ingest_returns_empty(tmp_path):
+    s = VectorStore(tmp_path, "empty")
+    assert s.query("anything", k=4) == []
