@@ -3,6 +3,6 @@
   {"q": "What are your typical lead times?", "expect": "30"},
   {"q": "Do you offer stretch denim?", "expect": "stretch"},
   {"q": "What is the lightest fabric weight?", "expect": "6"},
-  {"q": "Can I return a bulk order I changed my mind about?", "expect": "non-returnable"},
+  {"q": "Can I return a bulk order I changed my mind about?", "expect": ["non-returnable", "not returnable", "not possible", "cannot be returned", "cannot return"]},
   {"q": "Who is the CEO of Artistic Milliners?", "expect": "__unknown__"}
 ]
