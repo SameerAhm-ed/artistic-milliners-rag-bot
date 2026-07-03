@@ -12,7 +12,7 @@ Full design: [docs/design.md](docs/design.md). Follow it. If a change deviates, 
 ## Hard constraints
 - **$0 / fully local.** No paid APIs. Ever.
 - **Machine: 7.7 GB RAM, Intel UHD (no dedicated GPU).** Keep memory small. CPU inference.
-- LLM: Ollama `llama3.2:3b` (fallback `llama3.2:1b`). Embeddings: `fastembed` (all-MiniLM-L6-v2, ONNX). No torch.
+- LLM: Ollama `llama3.2:3b` (fallback `llama3.2:1b`). Embeddings: ChromaDB built-in `DefaultEmbeddingFunction` (ONNX all-MiniLM-L6-v2, CPU, no torch) — same lightweight MiniLM model, fewer deps than a separate fastembed install.
 
 ## Stack
 - Backend: FastAPI (Python 3.12), Chroma (local persistent vector store).
