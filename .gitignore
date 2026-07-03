@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Env / secrets
+.env
+.env.*
+
+# Chroma persistence
+backend/chroma_db/
+**/chroma_db/
+*.sqlite3
+
+# Node / Vite
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Models / caches
+*.gguf
+.cache/
+.fastembed_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
