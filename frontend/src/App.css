@@ -1,184 +1,381 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-}
-
-.hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
-}
-
-#center {
+.app {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
+  height: 100dvh;
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--bone);
 }
 
-#next-steps {
+/* ---------- Header ---------- */
+.header {
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--paper);
+  flex-shrink: 0;
+}
+.header-eyebrow {
+  margin: 0 0 2px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.header-title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* ---------- Message list ---------- */
+.chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 16px;
   display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
+  flex-direction: column;
+  gap: 14px;
+  -webkit-overflow-scrolling: touch;
+}
 
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
+.empty {
+  margin: auto;
+  max-width: 320px;
+  text-align: center;
+  padding: 0 8px;
+}
+.empty-title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.empty-sub {
+  margin: 0 0 20px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.empty-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.suggestion-chip {
+  font-size: 13px;
+  color: var(--indigo-deep);
+  background: var(--indigo-tint);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+.suggestion-chip:hover {
+  background: #e2e9f1;
+}
+.suggestion-chip:active {
+  transform: scale(0.98);
+}
+.suggestion-chip:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
+
+/* ---------- Bubbles ---------- */
+.msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 88%;
+  animation: rise 0.22s ease both;
+}
+.msg.user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+.msg.assistant {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
   }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
+.bubble {
+  padding: 11px 15px;
+  border-radius: 18px;
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.msg.user .bubble {
+  background: var(--indigo);
+  color: #fff;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 1px 2px rgba(26, 39, 64, 0.15);
+}
+.msg.assistant .bubble {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 5px;
+  box-shadow: 0 1px 2px rgba(26, 39, 64, 0.04);
+}
+.bubble-loading {
+  padding: 13px 16px;
 }
 
-#next-steps ul {
-  list-style: none;
-  padding: 0;
+/* ---------- Sources (selvedge tag signature) ---------- */
+.sources {
+  margin-top: 7px;
+  width: 100%;
+}
+.sources-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--indigo);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 2px;
+  border-radius: 4px;
+}
+.sources-toggle:hover {
+  color: var(--indigo-deep);
+}
+.sources-toggle:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
+.sources-toggle-caret {
+  display: inline-block;
+  font-size: 9px;
+  transition: transform 0.15s ease;
+}
+.sources-toggle-caret[data-open="true"] {
+  transform: rotate(90deg);
+}
+
+.sources-body {
+  margin-top: 6px;
+  animation: rise 0.15s ease both;
+}
+
+.source-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Selvedge tag: a small woven-label motif — dashed brass stitch on the left edge,
+   tabular-ish label type — nods to fabric provenance tags without being literal. */
+.source-tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  background: var(--brass-tint);
+  border-left: 2px dashed var(--brass);
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  padding: 4px 9px 4px 8px;
+  border-radius: 3px;
+  line-height: 1.4;
+}
+.source-tag-file {
+  font-weight: 650;
+  color: var(--ink);
+}
+.source-tag-sep {
+  color: var(--muted);
+}
+.source-tag-section {
+  color: var(--ink-soft);
+}
+
+.chunks {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.chunks summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 2px 0;
+}
+.chunks summary:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
+.chunk {
+  background: var(--indigo-tint);
+  color: var(--ink-soft);
+  padding: 9px 11px;
+  border-radius: 8px;
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+
+/* ---------- Composer ---------- */
+.composer {
   display: flex;
   gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
   border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
+  background: var(--paper);
+  flex-shrink: 0;
+}
+.composer input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 15px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--bone);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.composer input::placeholder {
+  color: var(--muted);
+}
+.composer input:focus {
+  border-color: var(--indigo);
+  background: var(--paper);
+  box-shadow: 0 0 0 3px rgba(61, 90, 128, 0.14);
+}
+.composer button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 13px;
+  background: var(--indigo);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.composer button:hover:not(:disabled) {
+  background: var(--indigo-deep);
+}
+.composer button:active:not(:disabled) {
+  transform: scale(0.94);
+}
+.composer button:focus-visible {
+  outline: 2px solid var(--indigo-deep);
+  outline-offset: 2px;
+}
+.composer button:disabled {
+  background: var(--muted);
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ---------- Error ---------- */
+.error {
+  align-self: center;
+  background: var(--danger-tint);
+  color: var(--danger);
+  font-size: 13px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  max-width: 90%;
+  text-align: center;
+}
+
+/* ---------- Typing indicator ---------- */
+.dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  height: 15px;
+}
+.dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: blink 1.3s infinite ease-in-out both;
+}
+.dots span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.dots span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-.ticks {
-  position: relative;
-  width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+@media (prefers-reduced-motion: reduce) {
+  .msg {
+    animation: none;
   }
-
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
+  .dots span {
+    animation: none;
+    opacity: 0.7;
   }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+}
+
+/* ---------- Desktop / larger viewports ---------- */
+@media (min-width: 640px) {
+  .app {
+    box-shadow: 0 0 0 1px var(--border);
+  }
+  .header {
+    padding: 20px 28px 16px;
+  }
+  .header-title {
+    font-size: 21px;
+  }
+  .chat {
+    padding: 24px 28px;
+    gap: 16px;
+  }
+  .bubble {
+    font-size: 15.5px;
+  }
+  .composer {
+    padding: 16px 24px;
+  }
+}
+
+@media (min-width: 900px) {
+  .app {
+    margin: 24px auto;
+    height: calc(100dvh - 48px);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(26, 39, 64, 0.06), 0 12px 32px rgba(26, 39, 64, 0.08);
   }
 }

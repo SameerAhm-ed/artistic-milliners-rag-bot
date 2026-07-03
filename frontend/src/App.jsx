@@ -1,122 +1,182 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useRef, useEffect } from "react";
+import { sendMessage } from "./api";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+const SESSION_ID = crypto.randomUUID();
+
+const SUGGESTIONS = [
+  "What is the MOQ?",
+  "What are typical lead times?",
+  "What fabrics do you offer?",
+  "What's your returns policy?",
+];
+
+export default function App() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const endRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages, loading]);
+
+  async function submit(text) {
+    if (!text || loading) return;
+    setError(null);
+    setInput("");
+    setMessages((m) => [...m, { role: "user", content: text }]);
+    setLoading(true);
+    try {
+      const res = await sendMessage(SESSION_ID, text);
+      setMessages((m) => [
+        ...m,
+        { role: "assistant", content: res.answer, sources: res.sources, chunks: res.chunks },
+      ]);
+    } catch (err) {
+      setError("Could not reach the assistant. Is the backend running?");
+    } finally {
+      setLoading(false);
+      inputRef.current?.focus();
+    }
+  }
+
+  function handleSend(e) {
+    e.preventDefault();
+    submit(input.trim());
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
+    <div className="app">
+      <header className="header">
+        <p className="header-eyebrow">Artistic Milliners</p>
+        <h1 className="header-title">Support Assistant</h1>
+      </header>
+
+      <main className="chat" aria-live="polite">
+        {messages.length === 0 && (
+          <div className="empty">
+            <p className="empty-title">Ask about sourcing, denim, or delivery.</p>
+            <p className="empty-sub">
+              Answers are grounded in our knowledge base and cite their sources.
+            </p>
+            <div className="empty-suggestions">
+              {SUGGESTIONS.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  className="suggestion-chip"
+                  onClick={() => submit(s)}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {messages.map((m, i) => (
+          <Message key={i} m={m} />
+        ))}
+        {loading && (
+          <div className="msg assistant" aria-label="Assistant is typing">
+            <div className="bubble bubble-loading">
+              <TypingDots />
+            </div>
+          </div>
+        )}
+        {error && (
+          <div className="error" role="alert">
+            {error}
+          </div>
+        )}
+        <div ref={endRef} />
+      </main>
+
+      <form className="composer" onSubmit={handleSend}>
+        <input
+          ref={inputRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type your question…"
+          aria-label="Message"
+          autoComplete="off"
+        />
+        <button type="submit" disabled={loading || !input.trim()} aria-label="Send message">
+          <SendIcon />
         </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </form>
+    </div>
+  );
 }
 
-export default App
+function Message({ m }) {
+  const [open, setOpen] = useState(false);
+  const isUser = m.role === "user";
+  return (
+    <div className={`msg ${m.role}`}>
+      <div className="bubble">{m.content}</div>
+      {!isUser && m.sources?.length > 0 && (
+        <div className="sources">
+          <button
+            type="button"
+            className="sources-toggle"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+          >
+            <span className="sources-toggle-caret" data-open={open}>
+              ▸
+            </span>
+            {open ? "Hide sources" : `Sources (${m.sources.length})`}
+          </button>
+          {open && (
+            <div className="sources-body">
+              <div className="source-tags">
+                {m.sources.map((s, i) => (
+                  <span key={i} className="source-tag">
+                    <span className="source-tag-file">{s.source_file}</span>
+                    <span className="source-tag-sep">·</span>
+                    <span className="source-tag-section">{s.section_title}</span>
+                  </span>
+                ))}
+              </div>
+              <details className="chunks">
+                <summary>Retrieved passages</summary>
+                {m.chunks.map((c, i) => (
+                  <p key={i} className="chunk">
+                    {c.text}
+                  </p>
+                ))}
+              </details>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TypingDots() {
+  return (
+    <span className="dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  );
+}
+
+function SendIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path
+        d="M17.5 2.5L2.5 8.75L9.375 10.625M17.5 2.5L11.25 17.5L9.375 10.625M17.5 2.5L9.375 10.625"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
