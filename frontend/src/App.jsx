@@ -33,7 +33,7 @@ export default function App() {
       const res = await sendMessage(SESSION_ID, text);
       setMessages((m) => [
         ...m,
-        { role: "assistant", content: res.answer, sources: res.sources, chunks: res.chunks },
+        { role: "assistant", content: res.answer, sources: res.sources ?? [], chunks: res.chunks ?? [] },
       ]);
     } catch (err) {
       setError("Could not reach the assistant. Is the backend running?");
@@ -143,7 +143,7 @@ function Message({ m }) {
               </div>
               <details className="chunks">
                 <summary>Retrieved passages</summary>
-                {m.chunks.map((c, i) => (
+                {(m.chunks ?? []).map((c, i) => (
                   <p key={i} className="chunk">
                     {c.text}
                   </p>
