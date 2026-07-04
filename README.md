@@ -125,11 +125,11 @@ changing `LLM_MODEL` and answers improve with no code changes.
 
 ## Screenshots
 
-_UI: mobile-first chat with grounded answers and expandable source citations._
+Mobile-first chat with grounded answers and expandable source citations.
 
-<!-- Add captured screenshots here, e.g.: -->
-<!-- ![Empty state](docs/screenshots/mobile-empty.png) -->
-<!-- ![Grounded answer with sources](docs/screenshots/mobile-answer.png) -->
+| Empty state | Grounded answer with cited sources |
+|---|---|
+| ![Empty state — suggestion chips](docs/screenshots/mobile-empty.png) | ![Grounded answer with expanded source citations](docs/screenshots/mobile-answer.png) |
 
 ## Stretch goals (not in v1)
 
