@@ -1,0 +1,58 @@
+/* Design system tokens — denim/mill palette, warm bone + indigo + brass accent */
+:root {
+  --ink: #1a2740;         /* deep indigo-navy — headings, primary text */
+  --ink-soft: #4a5568;    /* body text on light bg */
+  --muted: #8a8578;       /* warm gray — secondary text, timestamps */
+  --bone: #f7f5f1;        /* warm off-white — app background (selvedge) */
+  --paper: #ffffff;       /* card / bubble surface */
+  --border: #e7e2d8;      /* warm hairline border */
+  --indigo: #3d5a80;      /* primary accent — user bubble, links, focus */
+  --indigo-deep: #2c4160; /* pressed / hover state */
+  --indigo-tint: #eef2f7; /* faint indigo wash */
+  --brass: #b5893f;       /* rivet/brass — sparing highlight */
+  --brass-tint: #faf3e4;  /* faint brass wash for source tags */
+  --danger: #a13d3d;      /* muted brick red for errors */
+  --danger-tint: #f8ecec;
+
+  --font-body: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  --font-label: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bone);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
