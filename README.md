@@ -1,5 +1,7 @@
 # Artistic Milliners — Support RAG Chatbot
 
+[![CI](https://github.com/SameerAhm-ed/artistic-milliners-rag-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/SameerAhm-ed/artistic-milliners-rag-bot/actions/workflows/ci.yml)
+
 A retrieval-augmented (RAG) support assistant that answers questions **only** from a fixed
 knowledge base, cites its sources, and remembers the conversation. Runs **fully local at
 $0** — no paid APIs.
